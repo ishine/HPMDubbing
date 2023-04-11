@@ -56,6 +56,7 @@ class HPM_Dubbing(nn.Module):
                 model_config["transformer"]["encoder_hidden"],
             )
         self.n_emotion = 1
+        self.Synchronization_coefficient = 4
         if model_config["with_emotion"]:
             self.n_emotion = preprocess_config["preprocessing"]["emotion"]["n_emotion"]
             self.emotion_emb = nn.Embedding(
@@ -92,9 +93,14 @@ class HPM_Dubbing(nn.Module):
         """mask for voice, text, lip"""
         src_masks = get_mask_from_lengths(src_lens, max_src_len)  # tensor of True and False 16x249
         lip_masks = get_mask_from_lengths(lip_lens, max_lip_lens)
-        mel_masks = (
-            get_mask_from_lengths(mel_lens, max_mel_len)
-        )
+        if useGT:
+            mel_masks = (
+                get_mask_from_lengths(mel_lens, max_mel_len)
+            )
+        else:
+            mel_masks = (
+                get_mask_from_lengths(lip_lens*self.Synchronization_coefficient, max_lip_lens*self.Synchronization_coefficient)
+            )
         """Extract Style Vector following V2C"""
         style_vector = self.style_encoder(mels, mel_masks)
 
