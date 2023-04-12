@@ -153,7 +153,7 @@ class HPM_Dubbing(nn.Module):
             src_masks,
             mel_masks,
             src_lens,
-            mel_lens,
+            lip_lens*self.Synchronization_coefficient,
             attn_scores,
             emotion_prediction,
             max_src_len,
