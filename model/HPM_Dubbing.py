@@ -121,7 +121,7 @@ class HPM_Dubbing(nn.Module):
                     output = output + self.emotion_emb(emotions).unsqueeze(1).expand(
                         -1, max_src_len, -1)
                 else:
-                    output = output + emos.unsqueeze(1).expand(-1, max_mel_len, -1)
+                    output = output + spks.unsqueeze(1).expand(-1, max_mel_len, -1)
 
         """Prosody Adaptor"""
         (output, p_predictions, e_predictions,) = self.APA(output, mel_masks, max_mel_len, p_targets, e_targets,
